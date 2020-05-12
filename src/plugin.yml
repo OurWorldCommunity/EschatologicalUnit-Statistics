@@ -1,0 +1,8 @@
+name: EschatologicalUnit.Statistics
+main: online.smyhw.EschatologicalUnit.Statistics.smyhw
+version: 1.0.0
+author: smyhw
+commands:
+  euSt:
+    description: euSt
+    usage: /<command>

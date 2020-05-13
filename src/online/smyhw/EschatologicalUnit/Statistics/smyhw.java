@@ -181,11 +181,11 @@ public class smyhw extends JavaPlugin implements Listener
 	public static String SaveReport()
 	{
 		String Ran = getRandomString(27);
-		File SaveFile = new File(Ran+"");
+		File SaveFile = new File(smyhw.ReportDir+Ran+".html");
 		while(SaveFile.exists())
 		{
 			Ran = getRandomString(27);
-			SaveFile = new File(Ran+".html");
+			SaveFile = new File(smyhw.ReportDir+Ran+".html");
 		}
 		try 
 		{

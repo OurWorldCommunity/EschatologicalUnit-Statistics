@@ -51,7 +51,8 @@ public class API
 		if(temp1>smyhw.EndWaveNum)
 		{//触发游戏结束
 			String re = smyhw.SaveReport();
-			Bukkit.broadcastMessage("战绩报告已生成<"+"https://hanhz.smyhw.online/smyhw/EschatologicalUnit.php?ID="+re+">");
+			Bukkit.broadcastMessage(smyhw.prefix+"战绩报告已生成:");
+			Bukkit.broadcastMessage("https://hanhz.smyhw.online/smyhw/EschatologicalUnit.php?ID="+re);
 			return;
 		}
 		smyhw.configer.set("data.Wave",temp1+1 );

@@ -180,6 +180,7 @@ public class smyhw extends JavaPlugin implements Listener
 	//这里可以同步执行，反正是在一局结束之后，操作IO卡一下问题不大
 	public static String SaveReport()
 	{
+		if(!new File(smyhw.ReportDir).exists()) {new File(smyhw.ReportDir).mkdirs();}
 		String Ran = getRandomString(27);
 		File SaveFile = new File(smyhw.ReportDir+Ran+".html");
 		while(SaveFile.exists())

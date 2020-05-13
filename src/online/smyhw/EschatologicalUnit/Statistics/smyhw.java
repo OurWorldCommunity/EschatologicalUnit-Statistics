@@ -11,8 +11,14 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -26,6 +32,9 @@ public class smyhw extends JavaPlugin implements Listener
 	public static FileConfiguration configer;
 	public static List cmd_pre_Wave;
 	public static String prefix;
+	public static int EndWaveNum;
+	public static String ReportDir;
+	
 	@Override
     public void onEnable() 
 	{
@@ -39,6 +48,8 @@ public class smyhw extends JavaPlugin implements Listener
 		getLogger().info("正在加载配置...");
 		cmd_pre_Wave = configer.getStringList("config.cmd_pre_Wave");
 		prefix = configer.getString("config.prefix");
+		EndWaveNum = configer.getInt("config.EndWaveNum");
+		ReportDir = configer.getString("config.ReportDir");
 		saveConfig();
 		getLogger().info("正在注册监听器...");
 		Bukkit.getPluginManager().registerEvents(this,this);
@@ -68,11 +79,16 @@ public class smyhw extends JavaPlugin implements Listener
                 case"start":
                 	//侧边栏
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard objectives remove side" );
-                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard objectives add side dummy §nOurWorld_|_末日小队" );
-                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set ______ side -16" );
-                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set EschatologicalUnit side -17" );
-                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set 波数:0 side -12" );
+                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard objectives add side dummy §c§n§o§lOurWorld:末日小队" );
+                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set ~ side 35" );
+                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §e玩家货币 side 34" );
+                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set --------- side 33" );
                 	ChangeMoney("smyhw",0);
+                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set _________ side -11" );
+                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §l波数：0 side -12" );
+                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §l§c剩余怪物:§d0 side -13" );
+                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §n______________________ side -16" );
+                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §o§lEschatological_Unit side -17" );
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard objectives setdisplay sidebar side" );
                 	//end 侧边栏
                 	
@@ -152,19 +168,67 @@ public class smyhw extends JavaPlugin implements Listener
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent e)
 	{
-		
+		RefreshMobs(2);
 	}
 	
 	@EventHandler
 	public void onCreatureSpawn(CreatureSpawnEvent e)
 	{
-		
+		RefreshMobs(1);
 	}
 	
-	static int MobNum=0;
-	public static void RefreshMobs()
+	//这里可以同步执行，反正是在一局结束之后，操作IO卡一下问题不大
+	public static String SaveReport()
 	{
+		String Ran = getRandomString(27);
+		File SaveFile = new File(Ran+"");
+		while(SaveFile.exists())
+		{
+			Ran = getRandomString(27);
+			SaveFile = new File(Ran+".html");
+		}
+		try 
+		{
+			SaveFile.createNewFile();
+			PrintWriter temp = new PrintWriter(SaveFile);
+			Collection<? extends Player> Players = Bukkit.getOnlinePlayers();
+			for(Player p :Players)//写入玩家信息
+			{
+				temp.println("Player="+p.getName()+":"+API.GetPoint(p.getName()));
+			}
+			temp.println("Wave="+API.GetWave());
+			temp.close();
+		}
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
 		
+		return Ran;
+	}
+
+	 public static String getRandomString(int length){
+	     String str="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	     Random random=new Random();
+	     StringBuffer sb=new StringBuffer();
+	     for(int i=0;i<length;i++){
+	       int number=random.nextInt(62);
+	       sb.append(str.charAt(number));
+	     }
+	     return sb.toString();
+	 }
+	
+	static int MobNum=0;
+	public static void RefreshMobs(int type)
+	{
+		Collection<Monster> temp1 = Bukkit.getWorlds().get(0).getEntitiesByClass(org.bukkit.entity.Monster.class);
+		int newNum = temp1.size();
+		if(type==1) {newNum=newNum+1;}//如果是生物生成时，那么这个怪其实还不存在
+		if(type==2) {newNum=newNum-1;}
+		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players reset §l§c剩余怪物:§d"+MobNum+" side" );
+		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §l§c剩余怪物:§d"+newNum+" side -13" );
+		MobNum=newNum;
+		if(newNum<=0) {API.PassWave();}
 	}
 	
 	public static void ChangeMoney(String PlayerID,int num)
@@ -174,7 +238,7 @@ public class smyhw extends JavaPlugin implements Listener
     	int temp1=0;
         for(Player p :Players)
         {
-        	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players reset "+p.getName()+":"+API.GetMoney(p.getName())+" side" );
+        	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players reset "+p.getName()+"："+API.GetMoney(p.getName())+" side" );
         	temp1++;
         }
         
@@ -183,7 +247,7 @@ public class smyhw extends JavaPlugin implements Listener
         temp1=0;
         for(Player p :Players)
         {
-        	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players add "+p.getName()+":"+API.GetMoney(p.getName())+" side "+(12+temp1) );
+        	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players add "+p.getName()+"："+API.GetMoney(p.getName())+" side "+(12+temp1) );
         	temp1++;
         }
         

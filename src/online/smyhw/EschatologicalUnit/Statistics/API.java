@@ -48,6 +48,12 @@ public class API
 	public static void PassWave()
 	{
 		int temp1 = smyhw.configer.getInt("data.Wave");
+		if(temp1>smyhw.EndWaveNum)
+		{//触发游戏结束
+			String re = smyhw.SaveReport();
+			Bukkit.broadcastMessage("战绩报告已生成<"+"https://hanhz.smyhw.online/smyhw/EschatologicalUnit.php?ID="+re+">");
+			return;
+		}
 		smyhw.configer.set("data.Wave",temp1+1 );
 		 Iterator<String> temp2 =  smyhw.cmd_pre_Wave.iterator();
 	     while(temp2.hasNext())
@@ -56,8 +62,8 @@ public class API
 	        	cmd = cmd.replace("%num%", (temp1+1)+"");
 	        	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),cmd );
 	     }
-		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players reset 波数:"+temp1+" side" );
-		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set 波数:"+(temp1+1)+" side -12" );
+		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players reset §l波数："+temp1+" side" );
+		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §l波数："+(temp1+1)+" side -12" );
 	}
 
 }

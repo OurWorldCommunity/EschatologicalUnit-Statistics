@@ -206,7 +206,9 @@ public class smyhw extends JavaPlugin implements Listener
 		String JsonData = online.smyhw.localnet.lib.Json.Create(data);
 		try 
 		{
-			new FileWriter(SaveFile).write(JsonData);
+			FileWriter temp1 = new FileWriter(SaveFile);
+			temp1.write(JsonData);
+			temp1.close();
 		} catch (IOException e) 
 		{
 			Bukkit.broadcastMessage(prefix+"发生IO错误，请立即汇报管理员，该对局数据已丢失！");

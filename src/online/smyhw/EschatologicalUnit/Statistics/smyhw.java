@@ -17,6 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -180,6 +181,7 @@ public class smyhw extends JavaPlugin implements Listener
 	//这里可以同步执行，反正是在一局结束之后，操作IO卡一下问题不大
 	public static String SaveReport()
 	{
+		HashMap data = new HashMap();
 		if(!new File(smyhw.ReportDir).exists()) {new File(smyhw.ReportDir).mkdirs();}
 		String Ran = getRandomString(27);
 		File SaveFile = new File(smyhw.ReportDir+Ran+".html");
@@ -188,23 +190,29 @@ public class smyhw extends JavaPlugin implements Listener
 			Ran = getRandomString(27);
 			SaveFile = new File(smyhw.ReportDir+Ran+".html");
 		}
+		Collection<? extends Player> Players = Bukkit.getOnlinePlayers();
+		for(Player p :Players)//写入玩家信息
+		{
+			data.put(p.getName(), API.GetPoint(p.getName()));
+		}
+		String PlayerList="";
+		for(Player p :Players)//创建玩家列表
+		{
+			PlayerList = PlayerList+","+p.getName();
+		}
+		PlayerList = PlayerList.substring(1);//去除首部多余的逗号
+		data.put("PlayerList", PlayerList);
+		data.put("Wave", API.GetWave());
+		String JsonData = online.smyhw.localnet.lib.Json.Create(data);
 		try 
 		{
-			SaveFile.createNewFile();
-			PrintWriter temp = new PrintWriter(SaveFile);
-			Collection<? extends Player> Players = Bukkit.getOnlinePlayers();
-			for(Player p :Players)//写入玩家信息
-			{
-				temp.println("Player="+p.getName()+":"+API.GetPoint(p.getName()));
-			}
-			temp.println("Wave="+API.GetWave());
-			temp.close();
-		}
-		catch (IOException e) 
+			new FileWriter(SaveFile).write(JsonData);
+		} catch (IOException e) 
 		{
+			Bukkit.broadcastMessage(prefix+"发生IO错误，请立即汇报管理员，该对局数据已丢失！");
+        	loger.warning(prefix+"发生IO错误，请立即汇报管理员，该对局数据已丢失！");
 			e.printStackTrace();
 		}
-		
 		return Ran;
 	}
 

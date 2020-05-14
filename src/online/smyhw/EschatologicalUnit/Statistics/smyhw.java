@@ -193,7 +193,7 @@ public class smyhw extends JavaPlugin implements Listener
 		Collection<? extends Player> Players = Bukkit.getOnlinePlayers();
 		for(Player p :Players)//写入玩家信息
 		{
-			data.put(p.getName(), API.GetPoint(p.getName()));
+			data.put(p.getName(), API.GetPoint(p.getName())+"");
 		}
 		String PlayerList="";
 		for(Player p :Players)//创建玩家列表
@@ -202,7 +202,7 @@ public class smyhw extends JavaPlugin implements Listener
 		}
 		PlayerList = PlayerList.substring(1);//去除首部多余的逗号
 		data.put("PlayerList", PlayerList);
-		data.put("Wave", API.GetWave());
+		data.put("Wave", API.GetWave()+"");
 		String JsonData = online.smyhw.localnet.lib.Json.Create(data);
 		try 
 		{

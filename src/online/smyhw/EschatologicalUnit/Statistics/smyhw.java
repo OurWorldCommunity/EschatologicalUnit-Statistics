@@ -16,7 +16,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -35,6 +37,7 @@ public class smyhw extends JavaPlugin implements Listener
 	public static String prefix;
 	public static int EndWaveNum;
 	public static String ReportDir;
+	public static List<Player> PlayerList;//有效玩家列表
 	
 	@Override
     public void onEnable() 
@@ -46,6 +49,7 @@ public class smyhw extends JavaPlugin implements Listener
 		saveDefaultConfig();
 		configer = getConfig();
 		smyhw_ = this;
+		PlayerList = Collections.synchronizedList(new ArrayList<Player>());
 		getLogger().info("正在加载配置...");
 		cmd_pre_Wave = configer.getStringList("config.cmd_pre_Wave");
 		prefix = configer.getString("config.prefix");

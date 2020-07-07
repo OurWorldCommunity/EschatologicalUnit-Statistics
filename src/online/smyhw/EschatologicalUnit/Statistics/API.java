@@ -1,11 +1,36 @@
 package online.smyhw.EschatologicalUnit.Statistics;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public class API 
 {
+	/**
+	 * 
+	 * 操作有效玩家列表</br>
+	 * type=0 删除</br>
+	 * type=1 增加</br>
+	 * @param player
+	 * @param type
+	 * @return 操作完成后的列表
+	 */
+	public static List<Player> getPlayerList(Player player,int type)
+	{
+		switch(type)
+		{
+		case 0:
+			smyhw.PlayerList.remove(player);
+			if(smyhw.PlayerList.isEmpty()) {EndGame();}
+			break;
+		case 1:
+			smyhw.PlayerList.add(player);
+			break;
+		}
+		return smyhw.PlayerList;
+	}
 	public static void AddPoint(String PlayerID,int num)
 	{
 		smyhw.configer.set("data.Point."+PlayerID, num);
@@ -45,6 +70,18 @@ public class API
 		return smyhw.configer.getInt("data.Wave");
 	}
 	
+	public static void EndGame()
+	{
+		String re = smyhw.SaveReport();
+		Bukkit.broadcastMessage(smyhw.prefix+"战绩报告已生成:");
+		Bukkit.broadcastMessage("https://hanhz.smyhw.online/smyhw/EschatologicalUnit.php?ID="+re);
+		//执行结束指令
+		for(String temp2:smyhw.configer.getStringList("config.cmd_last"))
+		{
+			Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),temp2);
+		}
+	}
+	
 	public static void PassWave()
 	{
 		int temp1 = smyhw.configer.getInt("data.Wave");
@@ -59,14 +96,7 @@ public class API
 		}
 		if(temp1>smyhw.EndWaveNum)
 		{//触发游戏结束
-			String re = smyhw.SaveReport();
-			Bukkit.broadcastMessage(smyhw.prefix+"战绩报告已生成:");
-			Bukkit.broadcastMessage("https://hanhz.smyhw.online/smyhw/EschatologicalUnit.php?ID="+re);
-			//执行结束指令
-			for(String temp2:smyhw.configer.getStringList("config.cmd_last"))
-			{
-				Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),temp2);
-			}
+			EndGame();
 			return;
 		}
 		smyhw.configer.set("data.Wave",temp1+1 );

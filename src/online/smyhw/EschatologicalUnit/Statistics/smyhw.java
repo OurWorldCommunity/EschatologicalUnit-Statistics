@@ -145,8 +145,10 @@ public class smyhw extends JavaPlugin implements Listener
                     }
                 case "rplayer":
                 {
-                	API.getPlayerList((Player) sender, 0);
-                	sender.sendMessage(prefix+"玩家<"+sender.getName()+">已出局，目前玩家列表:"+smyhw.PlayerList.toArray().toString());
+                	if(args.length<2) {LPS(sender,"rplayer");return true;}
+                	Player temp3 = Bukkit.getPlayer(args[1]);
+                	API.getPlayerList(temp3, 0);
+                	sender.sendMessage(prefix+"玩家<"+temp3.getName()+">已出局，目前玩家列表:"+smyhw.PlayerList.toArray().toString());
                 	return true;
                 }
                 default:

@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ProxiedCommandSender;
 
 
 public class smyhw extends JavaPlugin implements Listener 
@@ -140,8 +141,14 @@ public class smyhw extends JavaPlugin implements Listener
                     {
                     	Monster temp3 = (Monster) temp2[i];
                     	sender.sendMessage(temp3.getName());
+                    	return true;
                     }
+                case "rplayer":
+                {
+                	API.getPlayerList((Player) sender, 0);
+                	sender.sendMessage(prefix+"玩家<"+sender.getName()+">已出局，目前玩家列表:"+smyhw.PlayerList.toArray().toString());
                 	return true;
+                }
                 default:
                 	sender.sendMessage(prefix+"非法使用 | 使用者信息已记录，此事将被上报");
                 	loger.warning(prefix+"使用者<"+sender.getName()+">试图非法使用指令<"+args+">{参数错误}");

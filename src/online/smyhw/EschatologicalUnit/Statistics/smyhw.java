@@ -17,6 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -150,6 +151,20 @@ public class smyhw extends JavaPlugin implements Listener
                 	API.getPlayerList(temp3, 0);
                 	sender.sendMessage(prefix+"玩家<"+temp3.getName()+">已出局，目前玩家列表:"+smyhw.PlayerList.toArray().toString());
                 	return true;
+                }
+                case "cost_cmd":
+                {
+                	if(args.length<3) {LPS(sender,"rplayer");return true;}
+                	int cost = Integer.parseInt(args[1]);
+                	if(API.GetMoney(sender.getName()) < cost) {sender.sendMessage(prefix+"你的资金不足");return true;}
+                	String[] tar_cmd_arr = Arrays.copyOfRange(args, 3,args.length);
+                	String tar_cmd = "";
+                	for(String temp3 : tar_cmd_arr)
+                	{
+                		tar_cmd = tar_cmd+temp3+" ";
+                	}
+                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),tar_cmd);
+                	API.AddMoney(sender.getName(), 0-cost);
                 }
                 default:
                 	sender.sendMessage(prefix+"非法使用 | 使用者信息已记录，此事将被上报");

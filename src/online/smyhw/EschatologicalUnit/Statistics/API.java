@@ -55,6 +55,11 @@ public class API
 //		new DoOperation("Money",PlayerID,num);
 	}
 	
+	/**
+	 * 分数
+	 * @param PlayerID
+	 * @return
+	 */
 	public static int GetPoint(String PlayerID)
 	{
 		return smyhw.configer.getInt("data.Point."+PlayerID);

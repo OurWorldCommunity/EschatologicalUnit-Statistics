@@ -109,6 +109,9 @@ public class smyhw extends JavaPlugin implements Listener
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard objectives remove Point" );
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard objectives add Point dummy" );
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard objectives setdisplay list Point " );
+                	PlayerList.clear();
+                	PlayerList.addAll(Bukkit.getOnlinePlayers());
+                	smyhw.configer.set("data.Wave",0);
                 	API.PassWave();
                 	return true;
                 	

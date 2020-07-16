@@ -161,7 +161,7 @@ public class smyhw extends JavaPlugin implements Listener
                 	Player player = Bukkit.getPlayer(args[1]);
                 	int cost = Integer.parseInt(args[2]);
                 	if(API.GetMoney(player.getName()) < cost) {player.sendMessage(prefix+"你的资金不足");return true;}
-                	String[] tar_cmd_arr = Arrays.copyOfRange(args, 4,args.length);
+                	String[] tar_cmd_arr = Arrays.copyOfRange(args, 3,args.length);
                 	String tar_cmd = "";
                 	for(String temp3 : tar_cmd_arr)
                 	{

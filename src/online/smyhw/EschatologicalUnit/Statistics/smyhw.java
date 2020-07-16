@@ -165,6 +165,13 @@ public class smyhw extends JavaPlugin implements Listener
                 	String tar_cmd = "";
                 	for(String temp3 : tar_cmd_arr)
                 	{
+                		if(temp3.equals("|||"))
+                		{
+                        	tar_cmd.replaceAll("%player%", player.getName());
+                        	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),tar_cmd);
+                        	tar_cmd="";
+                        	continue;
+                		}
                 		tar_cmd = tar_cmd+temp3+" ";
                 	}
                 	tar_cmd.replaceAll("%player%", player.getName());

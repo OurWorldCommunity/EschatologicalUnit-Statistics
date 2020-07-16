@@ -157,17 +157,19 @@ public class smyhw extends JavaPlugin implements Listener
                 }
                 case "cost_cmd":
                 {
-                	if(args.length<3) {LPS(sender,"rplayer");return true;}
-                	int cost = Integer.parseInt(args[1]);
-                	if(API.GetMoney(sender.getName()) < cost) {sender.sendMessage(prefix+"你的资金不足");return true;}
-                	String[] tar_cmd_arr = Arrays.copyOfRange(args, 3,args.length);
+                	if(args.length<4) {LPS(sender,"cost_cmd");return true;}
+                	Player player = Bukkit.getPlayer(args[1]);
+                	int cost = Integer.parseInt(args[2]);
+                	if(API.GetMoney(player.getName()) < cost) {player.sendMessage(prefix+"你的资金不足");return true;}
+                	String[] tar_cmd_arr = Arrays.copyOfRange(args, 4,args.length);
                 	String tar_cmd = "";
                 	for(String temp3 : tar_cmd_arr)
                 	{
                 		tar_cmd = tar_cmd+temp3+" ";
                 	}
+                	tar_cmd.replaceAll("%player%", player.getName());
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),tar_cmd);
-                	API.AddMoney(sender.getName(), 0-cost);
+                	API.AddMoney(player.getName(), 0-cost);
                 }
                 default:
                 	sender.sendMessage(prefix+"非法使用 | 使用者信息已记录，此事将被上报");

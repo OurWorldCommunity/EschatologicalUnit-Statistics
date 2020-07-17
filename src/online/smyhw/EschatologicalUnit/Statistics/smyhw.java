@@ -85,10 +85,14 @@ public class smyhw extends JavaPlugin implements Listener
                 {
                 case"start":
                 	//侧边栏
+                	//重载配置，抛弃上一对局的临时数据
+                	reloadConfig();
+                	configer = getConfig();
+                	this.MobNum=0;
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard objectives remove side" );
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard objectives add side dummy §c§n§o§lOurWorld:末日小队" );
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set ~ side 35" );
-                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §e玩家货币 side 34" );
+//                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §e玩家货币 side 34" );
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set --------- side 33" );
                 	ChangeMoney("smyhw",0);
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set _________ side -11" );
@@ -199,7 +203,9 @@ public class smyhw extends JavaPlugin implements Listener
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e)
 	{
-		
+		Location temp1 = e.getPlayer().getWorld().getSpawnLocation();
+		Boolean temp2 = e.getPlayer().teleport(temp1);
+		if(!temp2) {e.getPlayer().kickPlayer("内部错误，请联系管理员");}
 	}
 
 	@EventHandler
@@ -287,7 +293,7 @@ public class smyhw extends JavaPlugin implements Listener
 	public static void ChangeMoney(String PlayerID,int num)
 	{
 		int temp2 = smyhw.configer.getInt("data.Money."+PlayerID);
-       	Collection<? extends Player> Players = Bukkit.getOnlinePlayers();
+       	Collection<? extends Player> Players = API.getPlayerList(null, 2);
     	int temp1=0;
         for(Player p :Players)
         {

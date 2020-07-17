@@ -13,6 +13,7 @@ public class API
 	 * 操作有效玩家列表</br>
 	 * type=0 删除</br>
 	 * type=1 增加</br>
+	 * type=2 不做任何操作</br>
 	 * @param player
 	 * @param type
 	 * @return 操作完成后的列表
@@ -28,6 +29,8 @@ public class API
 		case 1:
 			smyhw.PlayerList.add(player);
 			break;
+		case 2:
+			return smyhw.PlayerList;
 		}
 		return smyhw.PlayerList;
 	}

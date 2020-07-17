@@ -94,7 +94,7 @@ public class smyhw extends JavaPlugin implements Listener
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set ~ side 35" );
 //                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §e玩家货币 side 34" );
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set --------- side 33" );
-                	ChangeMoney("smyhw",0);
+
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set _________ side -11" );
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §l波数：0 side -12" );
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §l§c剩余怪物:§d0 side -13" );
@@ -115,6 +115,7 @@ public class smyhw extends JavaPlugin implements Listener
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard objectives setdisplay list Point " );
                 	PlayerList.clear();
                 	PlayerList.addAll(Bukkit.getOnlinePlayers());
+                	ChangeMoney("smyhw",0);
                 	smyhw.configer.set("data.Wave",0);
                 	API.PassWave();
                 	return true;

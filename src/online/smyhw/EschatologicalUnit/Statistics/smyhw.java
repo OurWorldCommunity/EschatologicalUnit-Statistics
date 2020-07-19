@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -40,6 +41,7 @@ public class smyhw extends JavaPlugin implements Listener
 	public static int EndWaveNum;
 	public static String ReportDir;
 	public static List<Player> PlayerList;//有效玩家列表
+	public static TimeOut_PassWave TimeOutThread;
 	
 	@Override
     public void onEnable() 
@@ -66,6 +68,7 @@ public class smyhw extends JavaPlugin implements Listener
 	@Override
     public void onDisable() 
 	{
+		if(TimeOutThread!=null) {TimeOutThread.cancel();TimeOutThread=null;}
 		getLogger().info(prefix+"EschatologicalUnit.Statistics卸载");
     }
 	
@@ -117,6 +120,7 @@ public class smyhw extends JavaPlugin implements Listener
                 	PlayerList.addAll(Bukkit.getOnlinePlayers());
                 	ChangeMoney("smyhw",0);
                 	smyhw.configer.set("data.Wave",0);
+                	if(TimeOutThread!=null) {TimeOutThread.cancel();TimeOutThread=new TimeOut_PassWave();}
                 	API.PassWave();
                 	return true;
                 	
@@ -314,4 +318,24 @@ public class smyhw extends JavaPlugin implements Listener
         
 	}
 	
+}
+
+
+class TimeOut_PassWave extends BukkitRunnable
+{
+	int time=20*60*5;
+	TimeOut_PassWave()
+	{
+		this.runTaskTimer(Bukkit.getPluginManager().getPlugin("EschatologicalUnit.Statistics"), 0, 200);
+	}
+	@Override
+	public void run()
+	{
+		this.time = time-200;
+		if(time<=0)
+		{//触发下一波
+			API.PassWave();
+		}
+		this.time = 20*60*5;
+	}
 }

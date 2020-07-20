@@ -162,6 +162,7 @@ public class smyhw extends JavaPlugin implements Listener
                 	Player temp3 = Bukkit.getPlayer(args[1]);
                 	API.getPlayerList(temp3, 0);
                 	sender.sendMessage(prefix+"玩家<"+temp3.getName()+">已出局，目前玩家列表:"+smyhw.PlayerList.toArray().toString());
+                	Bukkit.broadcastMessage("队员<"+temp3.getName()+">倒在的血泊中....");
                 	return true;
                 }
                 case "cost_cmd":

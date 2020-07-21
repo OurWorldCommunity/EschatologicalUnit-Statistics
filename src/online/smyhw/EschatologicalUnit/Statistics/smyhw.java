@@ -120,7 +120,8 @@ public class smyhw extends JavaPlugin implements Listener
                 	PlayerList.addAll(Bukkit.getOnlinePlayers());
                 	ChangeMoney("smyhw",0);
                 	smyhw.configer.set("data.Wave",0);
-                	if(TimeOutThread!=null) {TimeOutThread.cancel();TimeOutThread=new TimeOut_PassWave();}
+                	if(TimeOutThread!=null) {TimeOutThread.cancel();}
+                	TimeOutThread=new TimeOut_PassWave();
                 	API.PassWave();
                 	return true;
                 	
@@ -325,7 +326,7 @@ public class smyhw extends JavaPlugin implements Listener
 class TimeOut_PassWave extends BukkitRunnable
 {
 	int time=20*60*5;
-	TimeOut_PassWave()
+	public TimeOut_PassWave()
 	{
 		this.runTaskTimer(Bukkit.getPluginManager().getPlugin("EschatologicalUnit.Statistics"), 0, 200);
 	}
@@ -336,7 +337,9 @@ class TimeOut_PassWave extends BukkitRunnable
 		if(time<=0)
 		{//触发下一波
 			API.PassWave();
+			this.time = 20*60*5;
 		}
-		this.time = 20*60*5;
+		System.out.println("time_out="+this.time);
+
 	}
 }

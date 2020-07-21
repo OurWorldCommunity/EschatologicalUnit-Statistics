@@ -83,6 +83,8 @@ public class API
 		String re = smyhw.SaveReport();
 		Bukkit.broadcastMessage(smyhw.prefix+"战绩报告已生成:");
 		Bukkit.broadcastMessage("https://hanhz.smyhw.online/smyhw/EschatologicalUnit.php?ID="+re);
+		//停止过关超时计时
+		smyhw.TimeOutThread.cancel();
 		//执行结束指令
 		for(String temp2:smyhw.configer.getStringList("config.cmd_last"))
 		{

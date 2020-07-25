@@ -41,6 +41,7 @@ public class smyhw extends JavaPlugin implements Listener
 	public static int EndWaveNum;
 	public static String ReportDir;
 	public static List<Player> PlayerList;//有效玩家列表
+	public static List<Player> fullPlayer;//全部玩家列表
 	public static TimeOut_PassWave TimeOutThread;
 	
 	@Override
@@ -118,6 +119,8 @@ public class smyhw extends JavaPlugin implements Listener
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard objectives setdisplay list Point " );
                 	PlayerList.clear();
                 	PlayerList.addAll(Bukkit.getOnlinePlayers());
+                	fullPlayer = Collections.synchronizedList(new ArrayList<Player>()); 
+                	fullPlayer.addAll(Bukkit.getOnlinePlayers());
                 	ChangeMoney("smyhw",0);
                 	smyhw.configer.set("data.Wave",0);
                 	if(TimeOutThread!=null) {TimeOutThread.cancel();}
@@ -220,7 +223,7 @@ public class smyhw extends JavaPlugin implements Listener
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e)
 	{
-		
+		API.getPlayerList(e.getPlayer(), 0);
 	}
 	
 	@EventHandler
@@ -247,7 +250,7 @@ public class smyhw extends JavaPlugin implements Listener
 			Ran = getRandomString(27);
 			SaveFile = new File(smyhw.ReportDir+Ran+".html");
 		}
-		Collection<? extends Player> Players = Bukkit.getOnlinePlayers();
+		Collection<? extends Player> Players = fullPlayer;
 		for(Player p :Players)//写入玩家信息
 		{
 			data.put(p.getName(), API.GetPoint(p.getName())+"");
@@ -302,7 +305,7 @@ public class smyhw extends JavaPlugin implements Listener
 	public static void ChangeMoney(String PlayerID,int num)
 	{
 		int temp2 = smyhw.configer.getInt("data.Money."+PlayerID);
-       	Collection<? extends Player> Players = API.getPlayerList(null, 2);
+       	Collection<? extends Player> Players = fullPlayer;
     	int temp1=0;
         for(Player p :Players)
         {

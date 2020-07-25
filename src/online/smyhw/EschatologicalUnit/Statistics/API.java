@@ -81,8 +81,12 @@ public class API
 	public static void EndGame()
 	{
 		String re = smyhw.SaveReport();
-		Bukkit.broadcastMessage(smyhw.prefix+"战绩报告已生成:");
-		Bukkit.broadcastMessage("https://hanhz.smyhw.online/smyhw/EschatologicalUnit.php?ID="+re);
+		Bukkit.broadcastMessage("§7§m                         ");
+		Bukkit.broadcastMessage("战绩报告已生成:");
+		Bukkit.broadcastMessage("https://hanhz.smyhw.online:8080/smyhw/EschatologicalUnit.php?ID="+re);
+		Bukkit.broadcastMessage("§7§m                         ");
+		Bukkit.broadcastMessage("根据说明在OW或AC中领取你的奖励！");
+		Bukkit.broadcastMessage("§7§m                         ");
 		//停止过关超时计时
 		smyhw.TimeOutThread.cancel();
 		//执行结束指令
@@ -90,6 +94,7 @@ public class API
 		{
 			Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),temp2);
 		}
+		
 	}
 	
 	public static void PassWave()

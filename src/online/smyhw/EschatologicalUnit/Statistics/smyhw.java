@@ -96,9 +96,9 @@ public class smyhw extends JavaPlugin implements Listener
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard objectives add side dummy §c§n§o§lOurWorld:末日小队" );
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set ~ side 35" );
 //                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §e玩家货币 side 34" );
-                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set --------- side 33" );
+                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §7§m--------------- side 33" );
 
-                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set _________ side -11" );
+                	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §7--------- side -11" );
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §l波数：0 side -12" );
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §l§c剩余怪物:§d0 side -13" );
                 	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players set §n______________________ side -16" );
@@ -129,12 +129,14 @@ public class smyhw extends JavaPlugin implements Listener
                 case "point":
                 	if(args.length<3) {LPS(sender,cmd.getName());return true;}
                 	API.AddPoint(args[1], Integer.parseInt(args[2]));
+                	sender.sendMessage("为玩家<"+args[1]+">添加<"+args[2]+">分数");
                 	return true;
                 	
                 case "M":
                 case "Money":
                 	if(args.length<3) {LPS(sender,cmd.getName());return true;}
                 	API.AddMoney(args[1], Integer.parseInt(args[2]));
+                	sender.sendMessage("为玩家<"+args[1]+">添加<"+args[2]+">货币");
                 	return true;
                 	
                 case"PW":
@@ -171,7 +173,7 @@ public class smyhw extends JavaPlugin implements Listener
                 	if(args.length<4) {LPS(sender,"cost_cmd");return true;}
                 	Player player = Bukkit.getPlayer(args[1]);
                 	int cost = Integer.parseInt(args[2]);
-                	if(API.GetMoney(player.getName()) < cost) {player.sendMessage(prefix+"你的资金不足");return true;}
+                	if(API.GetMoney(player.getName()) < cost) {player.sendMessage("§e[提示]§r:你的货币不足,这需要§d<§e"+cost+"§d>");return true;}
                 	String[] tar_cmd_arr = Arrays.copyOfRange(args, 3,args.length);
                 	String tar_cmd = "";
                 	for(String temp3 : tar_cmd_arr)
@@ -304,7 +306,7 @@ public class smyhw extends JavaPlugin implements Listener
     	int temp1=0;
         for(Player p :Players)
         {
-        	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players reset "+p.getName()+"："+API.GetMoney(p.getName())+" side" );
+        	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players reset "+p.getName()+"§r：§e"+API.GetMoney(p.getName())+" side" );
         	temp1++;
         }
         
@@ -313,7 +315,7 @@ public class smyhw extends JavaPlugin implements Listener
         temp1=0;
         for(Player p :Players)
         {
-        	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players add "+p.getName()+"："+API.GetMoney(p.getName())+" side "+(12+temp1) );
+        	Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"scoreboard players add "+p.getName()+"§r：§e"+API.GetMoney(p.getName())+" side "+(12+temp1) );
         	temp1++;
         }
         
